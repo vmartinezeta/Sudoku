@@ -6,7 +6,7 @@ import { SegmentoIzquierdo } from "./SegmentoIzquierdo";
 
 export class MiniTableIzquierdo extends MiniTable {
 
-    constructor({ parent, cells }: { parent: number, cells: ContentCell[][] }) {
+    constructor({ parent, cells }: { parent: number, cells?: ContentCell[][] }) {
         super({ parent, cells })
     }
 

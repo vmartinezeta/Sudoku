@@ -48,4 +48,8 @@ export class SegmentoDerecho {
     getC8() {
         return this.c8
     }
+
+    newInstance() {
+        return new SegmentoDerecho({ parent: this.parent, child: this.child, c6: this.c6, c7: this.c7, c8: this.c8 })
+    }
 }

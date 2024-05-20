@@ -5,8 +5,8 @@ import { SegmentoDerecho } from "./SegmentoDerecho";
 
 export class MiniTableDerecho extends MiniTable {
 
-    constructor({ parent, cells }: { parent: number, cells:ContentCell[][] }) {
-        super({ parent, cells})
+    constructor({ parent, cells }: { parent: number, cells?: ContentCell[][] }) {
+        super({ parent, cells })
     }
 
     crearSegmento({ index }: { index: number }) {
@@ -16,6 +16,6 @@ export class MiniTableDerecho extends MiniTable {
 
 
     newInstance() {
-        return new MiniTableDerecho({parent:this.parent, cells:this.cells})
+        return new MiniTableDerecho({ parent: this.parent, cells: this.cells })
     }
 }

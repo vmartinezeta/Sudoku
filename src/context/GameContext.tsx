@@ -2,14 +2,16 @@ import { createContext, useContext, useState } from "react";
 import { Sudoku } from "../classes/Sudoku";
 import { Segmento } from "../contracts/Segmentos";
 
-
-const GameContext = createContext<{
+type State = {
     sudoku: Sudoku | null,
     segmentoSelected: Segmento | null,
     setSegmento: (segmento: Segmento) => void,
     loadSudoku: () => void,
-    update: (row: Segmento) => void
-}>({
+    update: ({ segmento }: { segmento: Segmento }) => void
+}
+
+
+const GameContext = createContext<State>({
     sudoku: null,
     segmentoSelected: null,
     setSegmento: () => { },
@@ -30,7 +32,6 @@ export const useGame = () => {
 let sudokuGlobal = new Sudoku()
 
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
-
     const [sudoku, setSudoku] = useState<Sudoku>(sudokuGlobal)
     const [segmentoSelected, setSegmentoSelected] = useState<Segmento | null>(null)
 
@@ -43,9 +44,9 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         setSegmentoSelected(segmento)
     }
 
-    const update = (row: Segmento) => {
+    const update = ({ segmento }: { segmento: Segmento }) => {
         sudokuGlobal = sudokuGlobal.newInstance()
-        sudokuGlobal.update({ row })
+        sudokuGlobal.update({ segmento })
         setSudoku(sudokuGlobal)
     }
 

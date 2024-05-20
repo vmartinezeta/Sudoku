@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import "./App.css"
-import Table from "./components/Table"
 import { useGame } from "./context/GameContext"
+import Table from "./components/Table"
+import "./App.css"
 
 
 

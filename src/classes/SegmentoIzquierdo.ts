@@ -4,12 +4,12 @@ import { SegmentoIzquierdoFactory } from "../contracts/Segmentos"
 
 export class SegmentoIzquierdo {
     private parent: number
-    private child:number
+    private child: number
     private c0: ContentCell
     private c1: ContentCell
     private c2: ContentCell
 
-    constructor({parent, child, c0, c1, c2 }: SegmentoIzquierdoFactory) {
+    constructor({ parent, child, c0, c1, c2 }: SegmentoIzquierdoFactory) {
         this.parent = parent
         this.child = child
         this.c0 = c0
@@ -25,7 +25,7 @@ export class SegmentoIzquierdo {
         return this.child
     }
 
-    setC0(value:ContentCell) {
+    setC0(value: ContentCell) {
         this.c0 = value
     }
 
@@ -33,7 +33,7 @@ export class SegmentoIzquierdo {
         return this.c0
     }
 
-    setC1(value:ContentCell) {
+    setC1(value: ContentCell) {
         this.c1 = value
     }
 
@@ -41,7 +41,7 @@ export class SegmentoIzquierdo {
         return this.c1
     }
 
-    setC2(value:ContentCell) {
+    setC2(value: ContentCell) {
         this.c2 = value
     }
 
@@ -49,4 +49,8 @@ export class SegmentoIzquierdo {
         return this.c2
     }
 
+
+    newInstance() {
+        return new SegmentoIzquierdo({ parent: this.parent, child: this.child, c0: this.c0, c1: this.c1, c2: this.c2 })
+    }
 }

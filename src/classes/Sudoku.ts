@@ -20,25 +20,25 @@ export class Sudoku {
         }
     }
 
-    update({ row }: { row: Segmento }) {
-        const rowParent = this.rowTable[row.getParent()]
+    update({ segmento }: { segmento: Segmento }) {
+        const rowParent = this.rowTable[segmento.getParent()]
         const [izquierda, centro, derecha] = rowParent.getTables()
-        if (row instanceof SegmentoIzquierdo) {
-            izquierda.update({ index: row.getChild(), updated: [row.getC0(), row.getC1(), row.getC2()] })
-        } else if (row instanceof SegmentoCentro) {
-            centro.update({ index: row.getChild(), updated: [row.getC3(), row.getC4(), row.getC5()] })
-        } else if (row instanceof SegmentoDerecho) {
-            derecha.update({ index: row.getChild(), updated: [row.getC6(), row.getC7(), row.getC8()] })
+        if (segmento instanceof SegmentoIzquierdo) {
+            izquierda.update({ index: segmento.getChild(), updated: [segmento.getC0(), segmento.getC1(), segmento.getC2()] })
+        } else if (segmento instanceof SegmentoCentro) {
+            centro.update({ index: segmento.getChild(), updated: [segmento.getC3(), segmento.getC4(), segmento.getC5()] })
+        } else if (segmento instanceof SegmentoDerecho) {
+            derecha.update({ index: segmento.getChild(), updated: [segmento.getC6(), segmento.getC7(), segmento.getC8()] })
         }
     }
 
-    fullRow({row}:{row:Segmento}) {
-        const parent = row.getParent()
+    fullRow({segmento}:{segmento:Segmento}) {
+        const parent = segmento.getParent()
         const rowTable = this.rowTable[parent].getTables()
-        const rowizq = rowTable[0].toArray()[row.getChild()]
-        const rowcentro = rowTable[1].toArray()[row.getChild()]
-        const rowder = rowTable[2].toArray()[row.getChild()]
-        return [...rowizq, ...rowcentro, ...rowder]
+        const izq = rowTable[0].toArray()[segmento.getChild()]
+        const centro = rowTable[1].toArray()[segmento.getChild()]
+        const der = rowTable[2].toArray()[segmento.getChild()]
+        return [...izq, ...centro, ...der]
     }
 
     toArray() {

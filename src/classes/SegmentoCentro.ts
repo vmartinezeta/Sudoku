@@ -48,4 +48,8 @@ export class SegmentoCentro {
     getC5() {
         return this.c5
     }
+
+    newInstance() {
+        return new SegmentoCentro({ parent: this.parent, child: this.child, c3: this.c3, c4: this.c4, c5: this.c5 })
+    }
 }

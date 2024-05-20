@@ -46,6 +46,19 @@ export abstract class MiniTable {
         return this.cells
     }
 
+    toFlatArray() {
+        const cells = []
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                cells.push(this.cells[i][j])
+            }
+        }
+        return cells
+    }
+
+    existe(value:string) {
+        return this.toFlatArray().includes(value)
+    }
 
     public abstract newInstance(): MiniTable
 }

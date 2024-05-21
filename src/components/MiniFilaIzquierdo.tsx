@@ -7,8 +7,10 @@ import { Segmento } from "../contracts/Segmentos"
 
 
 function MiniFilaIzquierdo({ segmento }: { segmento: Segmento }) {
-    const { update } = useGame()
+    const { sudoku, update } = useGame()
     const [segmentoSelected, setSegmentoSelected] = useState<SegmentoIzquierdo>(segmento as SegmentoIzquierdo)
+
+
 
     const onSelected = (segmento: SegmentoIzquierdo) => {
         setSegmentoSelected(segmento.newInstance())
@@ -26,6 +28,7 @@ function MiniFilaIzquierdo({ segmento }: { segmento: Segmento }) {
             return
         }
 
+
         if (segmentoSelected instanceof SegmentoIzquierdo) {
             if (name === "C0") {
                 segmentoSelected.setC0(value)
@@ -40,6 +43,11 @@ function MiniFilaIzquierdo({ segmento }: { segmento: Segmento }) {
 
     const onUpdate = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
+            if (!sudoku?.isValido({ segmento: segmentoSelected })) {
+                setSegmentoSelected(segmento.newInstance() as SegmentoIzquierdo)
+                return
+            }
+            console.log("updated")
             update({ segmento: segmentoSelected })
         }
     }

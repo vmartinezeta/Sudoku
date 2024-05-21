@@ -1,3 +1,4 @@
+import { CellOrNull, ContentCell } from "../contracts/Cell"
 import { Segmento } from "../contracts/Segmentos"
 import { RowSudoku } from "./RowSudoku"
 import { SegmentoCentro } from "./SegmentoCentro"
@@ -20,6 +21,7 @@ export class Sudoku {
         }
     }
 
+
     update({ segmento }: { segmento: Segmento }) {
         const rowParent = this.rowTable[segmento.getParent()]
         const [izquierda, centro, derecha] = rowParent.getTables()
@@ -32,7 +34,8 @@ export class Sudoku {
         }
     }
 
-    fullRow({segmento}:{segmento:Segmento}) {
+
+    fullRow({ segmento }: { segmento: Segmento }) {
         const parent = segmento.getParent()
         const rowTable = this.rowTable[parent].getTables()
         const izq = rowTable[0].toArray()[segmento.getChild()]
@@ -41,9 +44,86 @@ export class Sudoku {
         return [...izq, ...centro, ...der]
     }
 
+
+    fullCol(segmento: Segmento) {
+        const cell = this.getCellActiva({ segmento })
+        if (!cell) return []
+        const col = cell?.col
+        let cols: ContentCell[] = []
+        for (let i = 0; i < 3; i++) {
+            const table = this.rowTable[i].getTables()[col]
+            cols = [...cols, ...table.getCol({ index: col })]
+        }
+        return cols
+    }
+
+
+    getCellActiva({ segmento }: { segmento: Segmento }): CellOrNull {
+        const rowTable = this.rowTable[segmento.getParent()]
+        const [izq, centro, der] = rowTable.getTables()
+
+        let rowOld = izq.toArray()[segmento.getChild()]
+        if (segmento instanceof SegmentoCentro) {
+            rowOld = centro.toArray()[segmento.getChild()]
+        } else if (segmento instanceof SegmentoDerecho) {
+            rowOld = der.toArray()[segmento.getChild()]
+        }
+
+        return this.findDiff(rowOld, segmento)
+    }
+
+
+    toSegmentoArray(segmento: Segmento) {
+        if (segmento instanceof SegmentoIzquierdo) {
+            return [segmento.getC0(), segmento.getC1(), segmento.getC2()]
+        } else if (segmento instanceof SegmentoCentro) {
+            return [segmento.getC3(), segmento.getC4(), segmento.getC5()]
+        }
+        return [segmento.getC6(), segmento.getC7(), segmento.getC8()]
+    }
+
+    getColParent(segmento:Segmento):number{        
+        if (segmento instanceof SegmentoIzquierdo) {
+            return 0
+        } else if (segmento instanceof SegmentoCentro) {
+            return 1
+        }
+        return 2
+    }
+
+
+    findDiff(rowOld: ContentCell[], segmento: Segmento): CellOrNull {
+        const rowNew = this.toSegmentoArray(segmento)
+        const parent = this.getColParent(segmento)
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (rowOld[i] !== rowNew[j]) {
+                    return {
+                        parent,
+                        row: i,
+                        col: j,
+                        content: rowNew[i]
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+
+    isValido({ segmento }: { segmento: Segmento }) {
+        const cell = this.getCellActiva({ segmento })
+        if (!cell) return false
+        const tables = this.rowTable[cell.row].getTables()
+        const table = tables[cell.parent]
+        return !table.existe(cell.content) && !this.fullRow({ segmento }).includes(cell.content)
+    }
+
+
     toArray() {
         return this.rowTable
     }
+
 
     newInstance() {
         return new Sudoku(this.rowTable.map(r => r.newInstance()))

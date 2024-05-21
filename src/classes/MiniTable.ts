@@ -7,7 +7,7 @@ export abstract class MiniTable {
     protected parent: number
 
 
-    constructor({ parent, cells }: { parent: number, cells?:ContentCell[][] }) {
+    constructor({ parent, cells }: { parent: number, cells?: ContentCell[][] }) {
         this.parent = parent
         if (cells) {
             this.cells = cells
@@ -28,6 +28,7 @@ export abstract class MiniTable {
     }
 
     public abstract crearSegmento({ index }: { index: number }): Segmento
+    public abstract newInstance(): MiniTable
 
 
     from({ index }: { index: number }) {
@@ -46,6 +47,7 @@ export abstract class MiniTable {
         return this.cells
     }
 
+
     toFlatArray() {
         const cells = []
         for (let i = 0; i < 3; i++) {
@@ -56,9 +58,18 @@ export abstract class MiniTable {
         return cells
     }
 
-    existe(value:string) {
+
+    existe(value: ContentCell) {
         return this.toFlatArray().includes(value)
     }
 
-    public abstract newInstance(): MiniTable
+
+    getCol({ index }: { index: number }) {
+        const cols = []
+        for (let i = 0; i < 3; i++) {
+            cols.push(this.cells[i][index])
+        }
+        return cols
+    }
+
 }

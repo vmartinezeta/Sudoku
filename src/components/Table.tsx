@@ -11,7 +11,7 @@ function Table({ minitable }: { minitable: MiniTable }) {
 
     return <div className="minitable">
         {
-            minitable.toSegmentoArray().map((segmento, index) => {                
+            minitable.toSegmentoArray().map((segmento, index) => {
                 return <div className="fila" key={index}>
                     {minitable instanceof MiniTableIzquierdo && <MiniFilaIzquierdo segmento={segmento} />}
                     {minitable instanceof MiniTableCentro && <MiniFilaCentro segmento={segmento} />}

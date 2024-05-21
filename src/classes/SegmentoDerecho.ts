@@ -3,11 +3,11 @@ import { SegmentoDerechoFactory } from "../contracts/Segmentos"
 
 
 export class SegmentoDerecho {
-    public parent: number
-    public child:number
-    public c6: ContentCell
-    public c7: ContentCell
-    public c8: ContentCell
+    private parent: number
+    private child:number
+    private c6: ContentCell
+    private c7: ContentCell
+    private c8: ContentCell
 
     constructor({parent, child, c6, c7, c8 }: SegmentoDerechoFactory) {
         this.parent = parent

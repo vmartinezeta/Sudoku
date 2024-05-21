@@ -6,7 +6,7 @@ import { Segmento } from "../contracts/Segmentos"
 
 
 function MiniFilaDerecho({ segmento }: { segmento: Segmento }) {
-    const { update } = useGame()
+    const { sudoku, update } = useGame()
     const [segmentoSelected, setSegmentoSelected] = useState<SegmentoDerecho>(segmento as SegmentoDerecho)
 
     const onSelected = (segmento: SegmentoDerecho) => {
@@ -40,6 +40,10 @@ function MiniFilaDerecho({ segmento }: { segmento: Segmento }) {
 
     const onUpdate = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
+            if (!sudoku?.isValido({ segmento: segmentoSelected })) {
+                setSegmentoSelected(segmento.newInstance() as SegmentoDerecho)
+                return
+            }            
             update({ segmento: segmentoSelected })
         }
     }

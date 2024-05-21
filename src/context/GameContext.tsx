@@ -3,10 +3,12 @@ import { Sudoku } from "../classes/Sudoku";
 import { Segmento } from "../contracts/Segmentos";
 
 type State = {
-    sudoku: Sudoku | null,
-    segmentoSelected: Segmento | null,
-    setSegmento: (segmento: Segmento) => void,
-    loadSudoku: () => void,
+    sudoku: Sudoku | null
+    segmentoSelected: Segmento | null
+    isPlaying: boolean
+    setSegmento: (segmento: Segmento) => void
+    loadSudoku: () => void
+    iniciarJuego: ()=> void
     update: ({ segmento }: { segmento: Segmento }) => void
 }
 
@@ -14,8 +16,10 @@ type State = {
 const GameContext = createContext<State>({
     sudoku: null,
     segmentoSelected: null,
+    isPlaying: false,
     setSegmento: () => { },
     loadSudoku: () => { },
+    iniciarJuego: ()=> {},
     update: () => { }
 })
 
@@ -34,7 +38,7 @@ let sudokuGlobal = new Sudoku()
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     const [sudoku, setSudoku] = useState<Sudoku>(sudokuGlobal)
     const [segmentoSelected, setSegmentoSelected] = useState<Segmento | null>(null)
-
+    const [isPlaying, setPlaying] = useState(false)
 
     const loadSudoku = () => {
         setSudoku(sudoku)
@@ -50,13 +54,18 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         setSudoku(sudokuGlobal)
     }
 
+    const iniciarJuego = () => {
+        setPlaying(true)
+    }
 
     return <GameContext.Provider value={{
         sudoku,
         segmentoSelected,
+        isPlaying,
         loadSudoku,
         setSegmento,
-        update
+        update,
+        iniciarJuego        
     }}>
         {children}
     </GameContext.Provider>

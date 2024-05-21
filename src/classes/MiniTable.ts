@@ -71,5 +71,5 @@ export abstract class MiniTable {
         }
         return cols
     }
-
+    
 }

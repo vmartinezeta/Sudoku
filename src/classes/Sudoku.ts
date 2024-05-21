@@ -48,11 +48,11 @@ export class Sudoku {
     fullCol(segmento: Segmento) {
         const cell = this.getCellActiva({ segmento })
         if (!cell) return []
-        const col = cell?.col
+        const col = cell.parent
         let cols: ContentCell[] = []
         for (let i = 0; i < 3; i++) {
             const table = this.rowTable[i].getTables()[col]
-            cols = [...cols, ...table.getCol({ index: col })]
+            cols = [...cols, ...table.getCol({ index: cell.col })]
         }
         return cols
     }
@@ -82,7 +82,8 @@ export class Sudoku {
         return [segmento.getC6(), segmento.getC7(), segmento.getC8()]
     }
 
-    getColParent(segmento:Segmento):number{        
+
+    getColParent(segmento: Segmento): number {
         if (segmento instanceof SegmentoIzquierdo) {
             return 0
         } else if (segmento instanceof SegmentoCentro) {
@@ -96,14 +97,12 @@ export class Sudoku {
         const rowNew = this.toSegmentoArray(segmento)
         const parent = this.getColParent(segmento)
         for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (rowOld[i] !== rowNew[j]) {
-                    return {
-                        parent,
-                        row: i,
-                        col: j,
-                        content: rowNew[i]
-                    }
+            if (rowOld[i] !== rowNew[i]) {
+                return {
+                    parent,
+                    row: segmento.getChild(),
+                    col: i,
+                    content: rowNew[i]
                 }
             }
         }
@@ -114,14 +113,27 @@ export class Sudoku {
     isValido({ segmento }: { segmento: Segmento }) {
         const cell = this.getCellActiva({ segmento })
         if (!cell) return false
-        const tables = this.rowTable[cell.row].getTables()
+        const tables = this.rowTable[segmento.getParent()].getTables()
         const table = tables[cell.parent]
-        return !table.existe(cell.content) && !this.fullRow({ segmento }).includes(cell.content)
+        return !table.existe(cell.content) && !this.fullRow({ segmento }).includes(cell.content) && !this.fullCol(segmento).includes(cell.content)
     }
 
 
     toArray() {
         return this.rowTable
+    }
+
+
+    finalizo() {
+        let cells:ContentCell[] = []
+        for (let i=0; i<3; i++) {
+            const tables = this.rowTable[i].getTables()
+            for (let j=0; j<3; j++) {
+                const table = tables[j]
+                cells = [...cells, ...table.toFlatArray()]
+            }
+        }
+        return !cells.some(value=>value==="")
     }
 
 

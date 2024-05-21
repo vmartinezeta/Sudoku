@@ -6,7 +6,7 @@ import { Segmento } from "../contracts/Segmentos"
 
 
 function MiniFilaDerecho({ segmento }: { segmento: Segmento }) {
-    const { sudoku, update } = useGame()
+    const { sudoku, update, isPlaying } = useGame()
     const [segmentoSelected, setSegmentoSelected] = useState<SegmentoDerecho>(segmento as SegmentoDerecho)
 
     const onSelected = (segmento: SegmentoDerecho) => {
@@ -22,6 +22,9 @@ function MiniFilaDerecho({ segmento }: { segmento: Segmento }) {
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
         const name = e.target.name
+        
+        if (!isPlaying) return 
+
         if (!isInputValido(value)) {
             return
         }
@@ -39,20 +42,19 @@ function MiniFilaDerecho({ segmento }: { segmento: Segmento }) {
     }
 
     const onUpdate = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            if (!sudoku?.isValido({ segmento: segmentoSelected })) {
-                setSegmentoSelected(segmento.newInstance() as SegmentoDerecho)
-                return
-            }            
-            update({ segmento: segmentoSelected })
-        }
+        if(e.key !== "Enter") return
+        if (!sudoku?.isValido({ segmento: segmentoSelected })) {
+            setSegmentoSelected(segmento.newInstance() as SegmentoDerecho)
+            return
+        }            
+        update({ segmento: segmentoSelected })
     }
 
 
     return <div className="fila">
-        <div className="col"><input name="C6" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC6():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} /></div>
-        <div className="col"><input name="C7" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC7():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} /></div>
-        <div className="col"><input name="C8" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC8():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} /></div>
+        <div className="col"><input name="C6" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC6():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} disabled={!isPlaying} /></div>
+        <div className="col"><input name="C7" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC7():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} disabled={!isPlaying} /></div>
+        <div className="col"><input name="C8" className="fila__input" type="text" value={segmentoSelected instanceof SegmentoDerecho ?segmentoSelected.getC8():""} autoComplete="off" onFocus={() => onSelected(segmentoSelected)} onChange={onEdit} onKeyUp={onUpdate} disabled={!isPlaying} /></div>
     </div>
 }
 

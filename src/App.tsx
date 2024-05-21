@@ -6,7 +6,7 @@ import "./App.css"
 
 
 function App() {
-  const { loadSudoku, sudoku } = useGame()
+  const { loadSudoku, sudoku, iniciarJuego, isPlaying } = useGame()
 
   useEffect(() => {
     loadSudoku()
@@ -14,19 +14,27 @@ function App() {
 
 
   return <div className="app">
-    <h1 className="title">Sudoku</h1>
-    <div className="table">
-      {
-        sudoku?.toArray().map((rowTable, rowTableId) => {
-          return <div className="fila" key={rowTableId}>
-            {
-              rowTable.getTables().map((table, tableId) => {
-                return <Table minitable={table} key={tableId} />
-              })
-            }
-          </div>
-        })
-      }
+    <div className="app__control">
+      <h1 className="title">Sudoku</h1>
+      <button className="button" onClick={()=>{
+          if (isPlaying) return
+          iniciarJuego()
+        }}>Iniciar</button>
+    </div>
+    <div className="app__preview">
+      <div className="table">
+        {
+          sudoku?.toArray().map((rowTable, rowTableId) => {
+            return <div className="fila" key={rowTableId}>
+              {
+                rowTable.getTables().map((table, tableId) => {
+                  return <Table minitable={table} key={tableId} />
+                })
+              }
+            </div>
+          })
+        }
+      </div>
     </div>
   </div>
 }

@@ -8,11 +8,10 @@ import MiniFilaIzquierdo from "./MiniFilaIzquierdo"
 
 
 function Table({ minitable }: { minitable: MiniTable }) {
-
     return <div className="minitable">
         {
             minitable.toSegmentoArray().map((segmento, index) => {
-                return <div className="fila" key={index}>
+                return <div key={index}>
                     {minitable instanceof MiniTableIzquierdo && <MiniFilaIzquierdo segmento={segmento} />}
                     {minitable instanceof MiniTableCentro && <MiniFilaCentro segmento={segmento} />}
                     {minitable instanceof MiniTableDerecho && <MiniFilaDerecho segmento={segmento} />}
